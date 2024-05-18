@@ -57,25 +57,79 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cell.textContent !== '' || currentQuestion) return;
 
         currentQuestion = getRandomQuestion();
-        const userAnswer = prompt(currentQuestion.question);
+        const newWindow = window.open("", "_blank", "fullscreen=yes");
+        newWindow.document.write(`
+            <style>
+                body {
+                    background-image: url('./back.jpeg');
+                    background-size: cover;
+                    background-position: center;
+                    font-family: Arial, sans-serif;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                #question-box {
+                    width: 500px;
+                    height: 170px;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                    text-align: center
+                }
+                h2 {
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                input {
+                    margin-bottom: 10px;
+                    padding: 8px;
+                    width: 90%;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                }
+                button {
+                    padding: 8px 20px;
+                    font-size: 1em;
+                    background-color: #007bff;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+            </style>
+            <div id="question-box">
+                <h2>${currentQuestion.question}</h2>
+                <input type="text" id="userAnswer">
+                <button onclick="submitAnswer()">Submit</button>
+            </div>
+        `);
 
-        if (userAnswer && userAnswer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
-            cell.textContent = isXTurn ? 'X' : 'O';
-            if (checkWin(isXTurn ? 'X' : 'O')) {
-                messageElement.textContent = `Congratulations! ${isXTurn ? 'X' : 'O'} wins!`;
-                messageElement.classList.add('winning-message');
-                cells.forEach(cell => cell.removeEventListener('click', handleClick));
-            } else if (isDraw()) {
-                messageElement.textContent = 'Draw!';
+        newWindow.submitAnswer = function() {
+            const userAnswer = newWindow.document.getElementById('userAnswer').value;
+            if (userAnswer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
+                cell.textContent = isXTurn ? 'X' : 'O';
+                if (checkWin(isXTurn ? 'X' : 'O')) {
+                    messageElement.textContent = `Congratulations! ${isXTurn ? 'X' : 'O'} wins!`;
+                    messageElement.classList.add('winning-message');
+                    cells.forEach(cell => cell.removeEventListener('click', handleClick));
+                } else if (isDraw()) {
+                    messageElement.textContent = 'Draw!';
+                } else {
+                    isXTurn = !isXTurn;
+                    messageElement.textContent = `${isXTurn ? 'X' : 'O'}'s turn.`;
+                }
             } else {
+                messageElement.textContent = `Wrong answer! ${isXTurn ? 'X' : 'O'}'s turn.`;
                 isXTurn = !isXTurn;
-                messageElement.textContent = `${isXTurn ? 'X' : 'O'}'s turn.`;
             }
-        } else {
-            messageElement.textContent = `Wrong answer! ${isXTurn ? 'X' : 'O'}'s turn.`;
-            isXTurn = !isXTurn;
-        }
-        currentQuestion = null;
+            currentQuestion = null;
+            newWindow.close();
+        };
     }
 
     function checkWin(currentPlayer) {

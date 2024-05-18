@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const cells = document.querySelectorAll('[data-cell]');
     const messageElement = document.getElementById('message');
     const restartButton = document.getElementById('restartButton');
+    const questionTypeContainer = document.getElementById('question-type-container');
     const gameContainer = document.getElementById('game-container');
+    const questionTypeButtons = document.querySelectorAll('.question-type-button');
 
     const questions = {
         math: [
@@ -30,13 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let askedQuestions = [];
     let currentQuestion = null;
 
-    const questionType = localStorage.getItem('questionType');
-    if (!questionType) {
-        window.location.href = 'menu.html';
-    } else {
-        selectedQuestions = questions[questionType];
-        startGame();
-    }
+    questionTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const questionType = button.getAttribute('data-type');
+            selectedQuestions = questions[questionType];
+            questionTypeContainer.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            startGame();
+        });
+    });
 
     function getRandomQuestion() {
         let randomQuestion;
@@ -107,7 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     restartButton.addEventListener('click', () => {
-        window.location.href = 'menu.html';
+        questionTypeContainer.style.display = 'block';
+        gameContainer.style.display = 'none';
     });
 
     startGame();

@@ -7,8 +7,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 style="color: white; margin-top: 100px;">Tic-Tac-Toe with Questions</h1>
-    <div id="game-container">
+    <h1 style="color: white; margin-top: 120px;">Tic-Tac-Toe with Questions</h1>
+    <div id="question-type-container">
+        <h2 style="color: white; margin-top: 130px;">Select Question Type</h2>
+        <button class="question-type-button" data-type="math">Math Questions</button>
+        <button class="question-type-button" data-type="general">General Knowledge</button>
+        <button class="question-type-button" data-type="science">Science Questions</button>
+    </div>
+    <div id="game-container" style="display: none;">
         <div id="game-board">
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Question Type</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 style="color: white; margin-top: 300px;">Select Question Type</h1>
+    <div id="question-type-container">
+        <button class="question-type-button" data-type="math">Math Questions</button>
+        <button class="question-type-button" data-type="general">General Knowledge</button>
+        <button class="question-type-button" data-type="science">Science Questions</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.question-type-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const questionType = button.getAttribute('data-type');
+                    localStorage.setItem('questionType', questionType);
+                    window.location.href = 'game.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

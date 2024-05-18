@@ -2,23 +2,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const cells = document.querySelectorAll('[data-cell]');
     const messageElement = document.getElementById('message');
     const restartButton = document.getElementById('restartButton');
-    const questions = [
-        { question: "What is 2 + 2?", answer: "4" },
-        { question: "What is the capital of France?", answer: "Paris" },
-        { question: "What is the color of the sky?", answer: "Blue" },
-        // Add more questions as needed
-    ];
+    const gameContainer = document.getElementById('game-container');
 
+    const questions = {
+        math: [
+            { question: "What is 2 + 2?", answer: "4" },
+            { question: "What is 3 * 3?", answer: "9" },
+            { question: "What is 10 / 2?", answer: "5" },
+            // Add more math questions
+        ],
+        general: [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "What is the largest ocean?", answer: "Pacific" },
+            { question: "Who wrote 'To Kill a Mockingbird'?", answer: "Harper Lee" },
+            // Add more general knowledge questions
+        ],
+        science: [
+            { question: "What planet is known as the Red Planet?", answer: "Mars" },
+            { question: "What is the chemical symbol for water?", answer: "H2O" },
+            { question: "What is the speed of light?", answer: "299792458" },
+            // Add more science questions
+        ]
+    };
+
+    let selectedQuestions = [];
     let isXTurn = true;
+    let askedQuestions = [];
+    let currentQuestion = null;
+
+    const questionType = localStorage.getItem('questionType');
+    if (!questionType) {
+        window.location.href = 'menu.html';
+    } else {
+        selectedQuestions = questions[questionType];
+        startGame();
+    }
+
+    function getRandomQuestion() {
+        let randomQuestion;
+        do {
+            randomQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
+        } while (askedQuestions.includes(randomQuestion.question));
+        
+        askedQuestions.push(randomQuestion.question);
+        return randomQuestion;
+    }
 
     function handleClick(event) {
         const cell = event.target;
-        if (cell.textContent !== '') return;
+        if (cell.textContent !== '' || currentQuestion) return;
 
-        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-        const userAnswer = prompt(randomQuestion.question);
+        currentQuestion = getRandomQuestion();
+        const userAnswer = prompt(currentQuestion.question);
 
-        if (userAnswer && userAnswer.toLowerCase() === randomQuestion.answer.toLowerCase()) {
+        if (userAnswer && userAnswer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
             cell.textContent = isXTurn ? 'X' : 'O';
             if (checkWin(isXTurn ? 'X' : 'O')) {
                 messageElement.textContent = `Congratulations! ${isXTurn ? 'X' : 'O'} wins!`;
@@ -34,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
             messageElement.textContent = `Wrong answer! ${isXTurn ? 'X' : 'O'}'s turn.`;
             isXTurn = !isXTurn;
         }
+        currentQuestion = null;
     }
 
     function checkWin(currentPlayer) {
@@ -64,11 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
         messageElement.textContent = '';
         messageElement.classList.remove('winning-message');
         isXTurn = true;
+        askedQuestions = [];
+        currentQuestion = null;
     }
 
-    restartButton.addEventListener('click', startGame);
+    restartButton.addEventListener('click', () => {
+        window.location.href = 'menu.html';
+    });
 
     startGame();
 });
-
-

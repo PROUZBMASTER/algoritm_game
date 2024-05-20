@@ -11,6 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
             { question: "What is 2 + 2?", answer: "4" },
             { question: "What is 3 * 3?", answer: "9" },
             { question: "What is 10 / 2?", answer: "5" },
+            { question: "What is 2 + 3?", answer: "5" },
+            { question: "What is 2 + 4?", answer: "6" },
+            { question: "What is 2 + 5?", answer: "7" },
+            { question: "What is 2 + 6?", answer: "8" },
+            { question: "What is 2 + 7?", answer: "9" },
+            { question: "What is 2 + 8?", answer: "10" },
+            { question: "What is 2 + 9?", answer: "11" },
+            { question: "What is 2 + 10?", answer: "12" },
+            { question: "What is 2 + 11?", answer: "13" },
             // Add more math questions
         ],
         general: [
@@ -78,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     padding: 20px;
                     border-radius: 10px;
                     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-                    text-align: center
+                    text-align: center;
                 }
                 h2 {
                     margin-bottom: 20px;
@@ -119,17 +128,26 @@ document.addEventListener("DOMContentLoaded", () => {
                     cells.forEach(cell => cell.removeEventListener('click', handleClick));
                 } else if (isDraw()) {
                     messageElement.textContent = 'Draw!';
+                    messageElement.classList.add('wrong-answer');
                 } else {
                     isXTurn = !isXTurn;
                     messageElement.textContent = `${isXTurn ? 'X' : 'O'}'s turn.`;
+                    messageElement.classList.add('wrong-answer');
                 }
             } else {
                 messageElement.textContent = `Wrong answer! ${isXTurn ? 'X' : 'O'}'s turn.`;
                 isXTurn = !isXTurn;
+                messageElement.classList.add('wrong-answer');
             }
             currentQuestion = null;
             newWindow.close();
         };
+
+        newWindow.document.getElementById('userAnswer').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                newWindow.submitAnswer();
+            }
+        });
     }
 
     function checkWin(currentPlayer) {

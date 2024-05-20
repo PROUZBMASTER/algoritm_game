@@ -59,12 +59,16 @@ h1 {
 #message {
     margin-top: 20px;
     font-size: 1.2em;
-    color: #333;
+    color: #ffff;
     text-align: center;
     min-height: 30px;
 }
 
 #restartButton {
+    background-color: blue;
+    color: white;
+    border-radius: 10px;
+    border: transparent;
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 1em;
@@ -80,4 +84,6 @@ h1 {
 .winning-message {
     animation: winningMessage 1s infinite;
 }
-
+.wrong-answer{
+    color: white;
+}
